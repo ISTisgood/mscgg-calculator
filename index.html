@@ -91,11 +91,12 @@ body{margin:8px}
        id="enrollment"
        placeholder="Enter Enrollment Number"
        style="
-         width:min(700px,90vw);
-         height:46px;
-         font-size:20px;
-         padding:0 12px;
-       ">
+ width:min(700px,90vw);
+ height:46px;
+ font-size:20px;
+ padding:0 12px;
+ box-sizing:border-box;
+">
 
   <button id="fetchBtn" onclick="fetchMarks()">Fetch Marks</button>
 
@@ -457,7 +458,7 @@ function capturePage(){
 </script>
 
 <hr style="margin-top:30px">
-<div style="text-align:center;font-size:12px;color:#666;padding-bottom:10px;">
+<div style="text-align:center;font-size:12px;color:#777;padding-bottom:10px;">
 MSCGG Calculator v3.0<br>
 Verify results with official IGNOU records.
 </div>
