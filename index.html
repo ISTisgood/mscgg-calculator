@@ -33,11 +33,15 @@ th,td{border:1px solid #ccc;padding:4px;text-align:center;font-size:13px}
 button{
 padding:8px 14px;
 cursor:pointer;
+height:42px;
+font-size:18px;
 }
 
 #elective{
 width:min(900px,90vw);
 max-width:900px;
+height:42px;
+font-size:18px;
 }
 
 #autoImport{
@@ -82,10 +86,13 @@ body{margin:8px}
 <div id="autoImport" style="margin-bottom:20px;">
   <b>Fetch from IGNOU Grade Card</b><br><br>
 
-  <input type="text"
-         id="enrollment"
-         placeholder="Enter Enrollment Number"
-         style="padding:8px;width:min(700px,90vw);">
+<input type="text"
+       id="enrollment"
+       placeholder="Enter Enrollment Number"
+       style="padding:10px 12px;
+              width:min(700px,90vw);
+              font-size:18px;
+              height:42px;">
 
   <button id="fetchBtn" onclick="fetchMarks()">Fetch Marks</button>
 
