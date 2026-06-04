@@ -8,8 +8,8 @@
 body{font-family:Arial,sans-serif;margin:15px}
 
 .container{
-max-width:1200px;
-margin:auto;
+width:100%;
+max-width:none;
 }
 .dark{background:#121212;color:#eee}
 .toolbar{display:flex;justify-content:space-between;align-items:center}
@@ -36,7 +36,8 @@ cursor:pointer;
 }
 
 #elective{
-width:min(650px,85vw);
+width:min(900px,90vw);
+max-width:900px;
 }
 
 #autoImport{
@@ -84,7 +85,7 @@ body{margin:8px}
   <input type="text"
          id="enrollment"
          placeholder="Enter Enrollment Number"
-         style="padding:8px;width:min(450px,80vw);">
+         style="padding:8px;width:min(700px,90vw);">
 
   <button id="fetchBtn" onclick="fetchMarks()">Fetch Marks</button>
 
@@ -232,9 +233,11 @@ function calc(){
  Practical: ${practical.toFixed(2)} / 600<br>
  Total: ${total.toFixed(2)} / 1250
  <hr>
- <div style="font-size:1.4em;font-weight:bold;">
- Final Percentage<br>${pct.toFixed(2)}%
- </div><br>
+
+ <b>Final Percentage: ${pct.toFixed(2)}%</b>
+
+ <br><br>
+
  <button onclick="copySummary()">📋 Copy Result</button>`;
  } else {
  summary.innerHTML=`<h3>Result Summary</h3>
@@ -354,6 +357,20 @@ function populateMarks(data){
 
   calc();
 }
+
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+  enrollment.addEventListener("keydown",(e)=>{
+    if(e.key==="Enter") fetchMarks();
+  });
+
+  elective.addEventListener("keydown",(e)=>{
+    if(e.key==="Enter") startCalc();
+  });
+
+});
+
 
 window.addEventListener("load",()=>{
 
