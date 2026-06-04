@@ -31,17 +31,18 @@ th,td{border:1px solid #ccc;padding:4px;text-align:center;font-size:13px}
 #summary{line-height:2;margin-top:15px}
 
 button{
-padding:8px 14px;
-cursor:pointer;
-height:42px;
-font-size:18px;
+  padding:0 18px;
+  cursor:pointer;
+  height:46px;
+  font-size:18px;
 }
 
 #elective{
-width:min(900px,90vw);
-max-width:900px;
-height:42px;
-font-size:18px;
+  width:min(900px,90vw);
+  max-width:900px;
+  height:46px;
+  font-size:18px;
+  padding:0 10px;
 }
 
 #autoImport{
@@ -89,10 +90,12 @@ body{margin:8px}
 <input type="text"
        id="enrollment"
        placeholder="Enter Enrollment Number"
-       style="padding:10px 12px;
-              width:min(700px,90vw);
-              font-size:18px;
-              height:42px;">
+       style="
+         width:min(700px,90vw);
+         height:46px;
+         font-size:20px;
+         padding:0 12px;
+       ">
 
   <button id="fetchBtn" onclick="fetchMarks()">Fetch Marks</button>
 
