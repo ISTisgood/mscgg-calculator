@@ -32,6 +32,7 @@ th,td{border:1px solid #ccc;padding:6px;text-align:center}
 <button id="themeBtn" onclick="toggleTheme()">🌙</button>
 <div>
 <button onclick="window.print()">📄 Print/PDF</button>
+<button onclick="shareLink()">🔗 Share Link</button>
 <button onclick="capturePage()">📷 Screenshot</button>
 </div>
 </div>
@@ -56,12 +57,13 @@ th,td{border:1px solid #ccc;padding:6px;text-align:center}
 
   <div id="electiveInfo" style="margin-top:8px;"></div>
   <div id="importTime" style="margin-top:5px;font-size:12px;color:#666;"></div>
+<div id="successMsg" style="display:none;color:#2e7d32;font-weight:bold;margin-top:8px;"></div>
 
   <br>
 </div>
 
 <div id="setup">
-<b>Select Elective Course</b><br><br>
+<div style="text-align:center;color:#666;font-weight:bold;margin:10px 0;">──────── OR ────────</div><div style="text-align:center;margin-bottom:12px;">Prefer to enter your marks manually?</div><b>Select Elective Course</b><br><br>
 <select id="elective">
 <option value="">-- Select Elective --</option>
 <option value="MGGE-002">MGGE-002 - Natural Resources Management</option>
@@ -241,8 +243,10 @@ function autoFill(data){
       electives[elective.value];
   }
 
-  importTime.innerHTML =
-    "Last Imported: " + new Date().toLocaleString();
+  importTime.innerHTML = "Last Imported: " + new Date().toLocaleString();
+
+  successMsg.style.display="block";
+  successMsg.innerHTML="✓ Grade card imported successfully";
 
   setup.style.display='none';
 
@@ -301,6 +305,25 @@ window.addEventListener("load",()=>{
 });
 
 
+
+function shareLink(){
+
+  const eno=document.getElementById("enrollment").value.trim();
+
+  if(!eno){
+    alert("Import a grade card first.");
+    return;
+  }
+
+  const link=
+    "https://istisgood.github.io/mscgg-calculator/?eno="+eno;
+
+  navigator.clipboard.writeText(link);
+
+  alert("Share link copied to clipboard.");
+}
+
+
 function toggleTheme(){
  document.body.classList.toggle('dark');
  themeBtn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';
@@ -314,5 +337,11 @@ function capturePage(){
  });
 }
 </script>
+
+<hr style="margin-top:30px">
+<div style="text-align:center;font-size:12px;color:#666;padding-bottom:10px;">
+MSCGG Calculator v3.0<br>
+Verify results with official IGNOU records.
+</div>
 </body>
 </html>
