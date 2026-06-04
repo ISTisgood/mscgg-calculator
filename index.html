@@ -11,10 +11,10 @@ body{font-family:Arial,sans-serif;margin:15px}
 h1{text-align:center;color:#2e7d32;margin:8px 0 4px}
 h3{text-align:center;color:#666;margin:0 0 20px}
 .wrap{overflow-x:auto}
-table{width:100%;min-width:1300px;border-collapse:collapse}
+table{width:100%;border-collapse:collapse;table-layout:auto}
 th{background:#2e7d32;color:#fff}
-th,td{border:1px solid #ccc;padding:6px;text-align:center}
-.subject{text-align:left}
+th,td{border:1px solid #ccc;padding:4px;text-align:center;font-size:13px}
+.subject{text-align:left;width:22%}
 .green{background:#d4edda}
 .yellow{background:#fff3cd}
 .red{background:#f8d7da}
@@ -24,6 +24,14 @@ th,td{border:1px solid #ccc;padding:6px;text-align:center}
 #calcArea{display:none}
 .notice{font-size:12px;color:#666;margin-top:8px}
 #summary{line-height:2;margin-top:15px}
+
+@media (max-width:768px){
+.subject{display:none}
+table{min-width:850px}
+th,td{padding:3px;font-size:12px}
+body{margin:8px}
+.toolbar{flex-wrap:wrap;gap:6px}
+}
 </style>
 </head>
 <body>
@@ -33,7 +41,7 @@ th,td{border:1px solid #ccc;padding:6px;text-align:center}
 <div>
 <button onclick="window.print()">📄 Print/PDF</button>
 <button onclick="shareLink()">🔗 Share Link</button>
-<button onclick="capturePage()">📷 Screenshot</button>
+<button onclick="capturePage()">📷 Table Image</button>
 </div>
 </div>
 
@@ -71,6 +79,7 @@ th,td{border:1px solid #ccc;padding:6px;text-align:center}
 <option value="MGGE-004">MGGE-004 - Hydrology and Water Resources</option>
 </select>
 <button onclick="startCalc()">Continue</button>
+
 </div>
 
 <div id="calcArea">
@@ -177,15 +186,41 @@ function calc(){
  });
  let pct=maxDone?total/maxDone*100:0;
  let allDone=(completed===20);
+
+ window.lastTheory=theory;
+ window.lastPractical=practical;
+ window.lastTotal=total;
+ window.lastPct=pct;
+ window.lastCompleted=completed;
+ window.lastMaxDone=maxDone;
+ window.lastTheoryMax=Math.min(maxDone,650);
+ window.lastPracticalMax=Math.max(0,maxDone-Math.min(maxDone,650));
+ window.lastAllDone=allDone;
+
+ if(allDone){
  summary.innerHTML=`<h3>Result Summary</h3>
- Theory Marks: ${theory.toFixed(2)} / ${Math.min(maxDone,650)}<br><br>
- Practical Marks: ${practical.toFixed(2)} / ${Math.max(0,maxDone-Math.min(maxDone,650))}<br><br>
- ${allDone?'Grand Total':'Current Total'}: ${total.toFixed(2)} / ${maxDone}<br>
- Programme Total: 1250<br><hr>
- <b>${allDone?'Final Percentage':'Current Percentage'}: ${pct.toFixed(2)}%</b><br>
- ${allDone?'All courses completed':(20-completed)+' courses pending'}<br><br>
- 🟢 ${completed} &nbsp; 🟡 ${incomplete} &nbsp; 🔴 ${below}`;
-}
+ Theory: ${theory.toFixed(2)} / 650<br>
+ Practical: ${practical.toFixed(2)} / 600<br>
+ Total: ${total.toFixed(2)} / 1250
+ <hr>
+ <div style="font-size:1.4em;font-weight:bold;">
+ Final Percentage<br>${pct.toFixed(2)}%
+ </div><br>
+ <button onclick="copySummary()">📋 Copy Result</button>`;
+ } else {
+ summary.innerHTML=`<h3>Result Summary</h3>
+ Theory Marks: ${theory.toFixed(2)} / ${Math.min(maxDone,650)}<br>
+ Practical Marks: ${practical.toFixed(2)} / ${Math.max(0,maxDone-Math.min(maxDone,650))}<br>
+ Current Total: ${total.toFixed(2)} / ${maxDone}<br>
+ Programme Total: 1250
+ <hr>
+ <b>Current Percentage: ${pct.toFixed(2)}%</b><br>
+ ${20-completed} Courses Remaining
+ <br><br>
+ 🟢 ${completed} &nbsp; 🟡 ${incomplete} &nbsp; 🔴 ${below}
+ <br><br>
+ <button onclick="copySummary()">📋 Copy Result</button>`;
+ }
 
 async function fetchMarks(){
 
@@ -305,6 +340,34 @@ window.addEventListener("load",()=>{
 
 
 
+
+function copySummary(){
+ let text="";
+ if(window.lastAllDone){
+ text=`MSCGGG Percentage Calculator
+
+Theory: ${window.lastTheory.toFixed(2)} / 650
+Practical: ${window.lastPractical.toFixed(2)} / 600
+Total: ${window.lastTotal.toFixed(2)} / 1250
+
+Final Percentage: ${window.lastPct.toFixed(2)}%`;
+ } else {
+ text=`MSCGGG Percentage Calculator
+
+Theory Marks: ${window.lastTheory.toFixed(2)} / ${window.lastTheoryMax}
+Practical Marks: ${window.lastPractical.toFixed(2)} / ${window.lastPracticalMax}
+
+Current Total: ${window.lastTotal.toFixed(2)} / ${window.lastMaxDone}
+Programme Total: 1250
+
+Current Percentage: ${window.lastPct.toFixed(2)}%
+
+${20-window.lastCompleted} Courses Remaining`;
+ }
+ navigator.clipboard.writeText(text);
+ alert("Result copied to clipboard.");
+}
+
 function shareLink(){
 
   const eno=document.getElementById("enrollment").value.trim();
@@ -328,9 +391,9 @@ function toggleTheme(){
  themeBtn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';
 }
 function capturePage(){
- html2canvas(document.getElementById('captureArea')).then(c=>{
+ html2canvas(document.querySelector('table'),{scale:2}).then(c=>{
    let a=document.createElement('a');
-   a.download='MSCGG_Percentage_Calculation.png';
+   a.download='MSCGGG_Table_Image.png';
    a.href=c.toDataURL();
    a.click();
  });
@@ -338,17 +401,9 @@ function capturePage(){
 </script>
 
 <hr style="margin-top:30px">
-
-<div style="
-text-align:center;
-font-size:12px;
-color:#666;
-padding-bottom:10px;">
-
-MSCGGG Calculator v3.0<br>
-Developed for IGNOU MSc Geography (MSCGG) students.<br>
+<div style="text-align:center;font-size:12px;color:#666;padding-bottom:10px;">
+MSCGG Calculator v3.0<br>
 Verify results with official IGNOU records.
-
 </div>
 </body>
 </html>
