@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,6 +108,7 @@ body{margin:8px}
   <div id="electiveInfo" style="margin-top:8px;"></div>
   <div id="importTime" style="margin-top:5px;font-size:12px;color:#666;"></div>
 <div id="successMsg" style="display:none;color:#2e7d32;font-weight:bold;margin-top:8px;"></div>
+<div id="studentInfo" style="margin-top:8px;font-weight:bold;"></div>
 
   <br>
 </div>
@@ -218,22 +220,24 @@ function calc(){
    else if(inc){row.classList.add('yellow');incomplete++;}
    else if(active){row.classList.add('green');}
 
-   if(active && !inc && !low){
+   const passed = active && !inc && !low;
+
+   if(passed){
 
    completed++;
 
-   maxDone+=c[3];
-   total+=con;
+   maxDone += c[3];
+   total += con;
 
    if(c[2]=='T')
-      theory+=con;
+      theory += con;
    else
-      practical+=con;
+      practical += con;
 
 }
  });
  let pct=maxDone?total/maxDone*100:0;
- let allDone=(completed===20);
+ let allDone=(completed===20 && below===0 && incomplete===0 && maxDone===1250);
 
  window.lastTheory=theory;
  window.lastPractical=practical;
@@ -290,14 +294,14 @@ async function fetchMarks(){
       "https://green-cell-64dc.berojgaar-2020.workers.dev/?eno=" + eno
     );
 
-    const data = await response.json();
+    const result = await response.json();
 
-    if(!data.length){
+    if(!result.courses || result.courses.length===0){
       alert("Enrollment number not found or no marks available.");
       return;
     }
 
-    autoFill(data);
+    autoFill(result);
 
   }catch(err){
 
@@ -311,7 +315,9 @@ async function fetchMarks(){
   }
 }
 
-function autoFill(data){
+function autoFill(result){
+
+  const data = result.courses;
 
   const electiveRecord=data.find(x=>x.course.startsWith("MGGE"));
 
@@ -331,6 +337,11 @@ function autoFill(data){
 
   successMsg.style.display="block";
   successMsg.innerHTML="✓ Grade card imported successfully";
+
+  studentInfo.innerHTML = `
+👤 <b>${result.name}</b><br>
+🎓 ${result.enrollment}
+`;
 
   setup.style.display='none';
 
