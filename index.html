@@ -218,12 +218,19 @@ function calc(){
    else if(inc){row.classList.add('yellow');incomplete++;}
    else if(active){row.classList.add('green');}
 
-   if(active && !inc){
-      completed++;
-      maxDone+=c[3];
-      total+=con;
-      if(c[2]=='T') theory+=con; else practical+=con;
-   }
+   if(active && !inc && !low){
+
+   completed++;
+
+   maxDone+=c[3];
+   total+=con;
+
+   if(c[2]=='T')
+      theory+=con;
+   else
+      practical+=con;
+
+}
  });
  let pct=maxDone?total/maxDone*100:0;
  let allDone=(completed===20);
@@ -342,7 +349,9 @@ function normalizeCode(code){
 }
 
 function populateMarks(data){
-
+  document.querySelectorAll("#tbody input").forEach(inp=>{
+  inp.value="";
+});
   const rows=document.querySelectorAll("#tbody tr");
 
   rows.forEach(row=>{
