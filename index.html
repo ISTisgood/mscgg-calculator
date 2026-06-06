@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -288,6 +289,11 @@ async function fetchMarks(){
   loading.style.display="block";
   fetchBtn.disabled=true;
 
+  studentInfo.innerHTML="";
+  successMsg.style.display="none";
+  electiveInfo.innerHTML="";
+  importTime.innerHTML="";
+
   try{
 
     const response = await fetch(
@@ -339,15 +345,15 @@ function autoFill(result){
   successMsg.innerHTML="✓ Grade card imported successfully";
 
   studentInfo.innerHTML = `
-👤 <b>${result.name}</b><br>
-🎓 ${result.enrollment}
+👤 <b>${result.name}</b><br> &nbsp;&nbsp; 🎓 ${result.enrollment}
 `;
 
   setup.style.display='none';
 
-  if(tbody.rows.length===0){
-    startCalc();
-  }
+  tbody.innerHTML='';
+  calcArea.style.display='block';
+
+  startCalc();
 
   populateMarks(data);
 }
