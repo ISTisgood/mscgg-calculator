@@ -213,7 +213,7 @@ function calc(){
       active=(l!==''||p!=='');
       inc=((l!==''&&p==='')||(l===''&&p!==''));
       low=((l!==''&&+l<40)||(p!==''&&+p<40));
-      if(l!==''&&p!==''){fm=(+l*0.7)+(+p*0.3);con=fm;}
+      if(l!==''&&p!==''){fm=(+l*0.3)+(+p*0.7);con=fm;}
    }
    row.querySelector('.fm').textContent=fm.toFixed(2);
    row.querySelector('.con').textContent=con.toFixed(2);
